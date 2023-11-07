@@ -60,13 +60,13 @@ const linkedInOauth = async (req, res, next) => {
     //here we get this code from passport linkedin strategy.
     const code = req.query.code;
 
-    const redirectUri = "http://localhost:8000/api/v1/auth/linkedin/callback";
+    const redirectUri = `${process.env.BASE_URL}/api/v1/auth/linkedin/callback`;
     let accessToken;
 	let userInfo
     const clientId = process.env.LINKEDIN_CLIENT_ID;
     const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
     //step 2 : access token retrieval
-    const accessTokenUrl = `http://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}&client_id=${clientId}&client_secret=${clientSecret}`;
+    const accessTokenUrl = `https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}&client_id=${clientId}&client_secret=${clientSecret}`;
     await axios
       .post(accessTokenUrl)
       .then((res) => {
@@ -76,7 +76,7 @@ const linkedInOauth = async (req, res, next) => {
         console.log(err);
       });
     //Fetching User Data
-    const userInfoUrl = `http://api.linkedin.com/v2/userinfo`;
+    const userInfoUrl = `https://api.linkedin.com/v2/userinfo`;
     if (accessToken) {
       await axios
         .get(userInfoUrl, {
@@ -100,7 +100,7 @@ const linkedInOauth = async (req, res, next) => {
             "Please add a public email to your LinkedIn account to sign in in with LinkedIn",
         };
         req.flash("error", emailNotFound);
-        return redirect("http://localhost:8000/error");
+        return redirect(`${process.env.BASE_URL}/error`);
       }
       // return access token if user already exists
       const userExists = await User.findOne({

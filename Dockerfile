@@ -7,5 +7,5 @@ COPY . .
 EXPOSE 8000
 RUN chown -R node /usr/src/app
 USER node
-RUN chmod -R a+rwx /usr/src/app
+RUN chmod -R a+rwx /usr/src/app && export npm_config_cache=/usr/src/app/
 CMD ["npm", "start"]
