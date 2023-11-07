@@ -18,7 +18,6 @@
 		"express-flash": "^0.0.2",
 		"express-session": "^1.17.3",
 		"helmet": "^4.6.0",
-		"https": "^1.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"keycloak-connect": "^22.0.4",
 		"mongoose": "^7.4.1",

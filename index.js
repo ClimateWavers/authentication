@@ -3,8 +3,6 @@ const app = express();
 require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
-const fs = require("fs");
-const https = require("https");
 const { authRouter, kc, currentSession } = require("./src/routers/auth");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
@@ -63,17 +61,7 @@ app.get("/error", (req, res) => {
 
 	}
 })
-var privateKey = fs.readFileSync("./cert/CA.key");
-var certificate = fs.readFileSync("./cert/CA.pem");
 
-https
-  .createServer(
-    {
-      key: privateKey,
-      cert: certificate,
-    },
-    app
-  )
-  .listen(process.env.PORT, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Server running on port: ${port}`);
   });

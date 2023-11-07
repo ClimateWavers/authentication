@@ -9,7 +9,7 @@ passport.use(
     {
 		consumerKey: process.env.X_CLIENT_ID,
 		consumerSecret: process.env.X_CLIENT_SECRET,
-		callbackURL: `https://localhost:8000/api/v1/auth/twitter/callback`,
+		callbackURL: `http://localhost:8000/api/v1/auth/twitter/callback`,
     },
     async (token, tokenSecret, profile, done) => {
 		try {
