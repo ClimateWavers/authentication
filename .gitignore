@@ -1,0 +1,18 @@
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore system and temporary files
+.DS_Store
+.vscode/
+.myenv/
+*.sqlite3
+*.db.sqlite3
+.env
+**/*/media/
+**/*/migrations/
+**/*/static/
+**/*/templates/
+node_modules/
+
+
