@@ -22,7 +22,7 @@ google.use(
           // generate an jwt token for user
 		  const userDetails = {id: userExists.id, email: userExists.email, accessToken};
           if (refreshToken) {
-			await Token.findOrCreate({ default: { UserId: userExists.id }, where: {
+			await Token.findOrCreate({ defaults: { UserId: userExists.id }, where: {
 				refreshToken: refreshToken
 			}
 			  })
