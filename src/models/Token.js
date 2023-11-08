@@ -10,7 +10,7 @@ const Token = sequelize.define(
 		primaryKey: true,
 		defaultValue: DataTypes.UUIDV4
 	  },
-    refreshToken: { type: DataTypes.STRING, required: true },
+    refreshToken: { type: DataTypes.STRING },
     isValid: { type: DataTypes.BOOLEAN, defaultValue: true },
   },
   { tableName: "token", timestamps: true, underscored: true}
