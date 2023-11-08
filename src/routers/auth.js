@@ -12,18 +12,8 @@ const github = require("../config/github");
 const keycloakConf = require("../config/keycloak");
 const authRouter = express.Router();
 const session = require("express-session");
-const RedisStore = require("connect-redis").default
-const {createClient} = require("redis")
+const memoryStore = new session.MemoryStore();// Initialize client.
 
-// Initialize client.
-let redisClient = createClient()
-redisClient.connect().catch(console.error)
-
-// Initialize store.
-let redisStore = new RedisStore({
-  client: redisClient,
-  prefix: "myapp:",
-})
 const currentSession = session({
   cookie: {
     secure: true,
@@ -32,12 +22,12 @@ const currentSession = session({
   secret: "secret",
   resave: true,
   saveUninitialized: true,
-  store: redisStore,
+  store: memoryStore,
 });
 // Keycloak initiation
 var kc = new Keycloak(
   {
-    store: redisStore,
+    store: memoryStore,
   },
   keycloakConf
 );
