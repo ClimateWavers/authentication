@@ -6,5 +6,5 @@ RUN npm install --production --silent && mv node_modules ../
 COPY . .
 EXPOSE 8000
 RUN chmod -R a+rwx /usr/src/app
-RUN export npm_config_cache=/usr/src/app/
+RUN echo "export npm_config_cache=/usr/src/app/" >> ~/.bashrc
 CMD ["npm", "start"]
