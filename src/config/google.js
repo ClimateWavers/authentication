@@ -22,12 +22,15 @@ google.use(
           // generate an jwt token for user
 		  const userDetails = {id: userExists.id, email: userExists.email, accessToken};
           if (refreshToken) {
-              existingToken = await Token.update({ refreshToken: refreshToken }, {
-				where: {
-					UserId: userExists.id
-				}
+			const [ existingToken, created] = await Token.findOrCreate({ where: {
+				UserId: userExists.id
+			}, default: { refreshToken: refreshToken }
 			  });
-          }
+		  if (!created) {
+			await existingToken.update({ refreshToken: refreshToken });
+			await existingToken.save()
+		  }
+		}
           return done(null, userDetails);
         }
 		console.log(profile._json)
@@ -48,7 +51,10 @@ google.use(
 		await Token.create({
 			refreshToken: refreshToken,
 			UserId: user.id,
-		  });
+		  })
+		  .catch(err => {
+			console.log(err.message)
+		  })
         return done(null, userDetails);
       } catch (err) {
 		console.log(err)

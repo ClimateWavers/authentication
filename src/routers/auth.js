@@ -1,6 +1,10 @@
 const express = require("express");
 const Keycloak = require("keycloak-connect");
-const { oauthSignIn, redhatSS0, linkedInOauth } = require("../controllers/auth");
+const {
+  oauthSignIn,
+  redhatSS0,
+  linkedInOauth,
+} = require("../controllers/auth");
 const google = require("../config/google");
 const linkedin = require("../config/linkedin");
 const facebook = require("../config/facebook");
@@ -8,18 +12,32 @@ const github = require("../config/github");
 const keycloakConf = require("../config/keycloak");
 const authRouter = express.Router();
 const session = require("express-session");
-const memoryStore = new session.MemoryStore();
+const RedisStore = require("connect-redis").default
+const {createClient} = require("redis")
 
+// Initialize client.
+let redisClient = createClient()
+redisClient.connect().catch(console.error)
+
+// Initialize store.
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "myapp:",
+})
 const currentSession = session({
+  cookie: {
+    secure: true,
+    maxAge: 60000,
+  },
   secret: "secret",
   resave: true,
   saveUninitialized: true,
-  store: memoryStore,
+  store: redisStore,
 });
 // Keycloak initiation
 var kc = new Keycloak(
   {
-    store: memoryStore,
+    store: redisStore,
   },
   keycloakConf
 );
@@ -78,12 +96,7 @@ authRouter.get(
   linkedin.authenticate("linkedin", { scope: ["email", "profile", "openid"] })
 );
 
-authRouter.get(
-  "/linkedin/callback",
-  linkedInOauth,
-  oauthSignIn
-);
-
+authRouter.get("/linkedin/callback", linkedInOauth, oauthSignIn);
 
 // Login with github
 authRouter.get(
@@ -94,10 +107,10 @@ authRouter.get(
 authRouter.get(
   "/github/callback",
   github.authenticate("github", {
-	failureFlash: true,
+    failureFlash: true,
     failureRedirect: "/error",
   }),
   oauthSignIn
 );
 
-module.exports = { authRouter, currentSession, memoryStore, kc };
+module.exports = { authRouter, currentSession, kc };
