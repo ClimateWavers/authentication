@@ -4,7 +4,6 @@ const { oauthSignIn, redhatSS0, linkedInOauth } = require("../controllers/auth")
 const google = require("../config/google");
 const linkedin = require("../config/linkedin");
 const facebook = require("../config/facebook");
-const twitter = require("../config/twitter");
 const github = require("../config/github");
 const keycloakConf = require("../config/keycloak");
 const authRouter = express.Router();
@@ -73,7 +72,7 @@ authRouter.get(
   oauthSignIn
 );
 
-// Login with twitter
+// Login with LinkedIn
 authRouter.get(
   "/linkedin",
   linkedin.authenticate("linkedin", { scope: ["email", "profile", "openid"] })
@@ -85,17 +84,7 @@ authRouter.get(
   oauthSignIn
 );
 
-// Login with LinkedIn
-authRouter.get("/twitter", twitter.authenticate("twitter"));
 
-authRouter.get(
-  "/twitter/callback",
-  twitter.authenticate("twitter", {
-    failureRedirect: "/error",
-    failureFlash: true,
-  }),
-  oauthSignIn
-);
 // Login with github
 authRouter.get(
   "/github",
