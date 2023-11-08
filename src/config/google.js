@@ -22,15 +22,9 @@ google.use(
           // generate an jwt token for user
 		  const userDetails = {id: userExists.id, email: userExists.email, accessToken};
           if (refreshToken) {
-			await Token.findOrCreate({ default: { refreshToken: refreshToken}, where: {
-				UserId: userExists.id
+			await Token.findOrCreate({ default: { UserId: userExists.id }, where: {
+				refreshToken: refreshToken
 			}
-			  })
-			  .then(async ([ existingToken, created]) => {
-				if (!created) {
-					await existingToken.update({ refreshToken: refreshToken });
-					await existingToken.save()
-				  }
 			  })
 
 		}
