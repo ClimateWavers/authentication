@@ -10,8 +10,6 @@ const passport = require('passport')
 const dbConnect = require("./src/utils/dbconnect");
 const port = process.env.PORT;
 const flash = require('express-flash');
-const https = require("https")
-const fs = require("fs")
 app.use(flash());
 
 // connect database
@@ -32,8 +30,6 @@ app.use(
     origin: process.env.BASE_URL,
   })
 );
-const key = fs.readFileSync("cert/CA.key")
-const cert = fs.readFileSync("cert/CA.pem")
 
 //built-in middleware for json
 app.use(express.json());
@@ -65,10 +61,7 @@ app.get("/error", (req, res) => {
 
 	}
 })
-https.createServer({
-	key: key,
-	cert: cert
 
-}, app).listen(process.env.PORT, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Server running on port: ${port}`);
   });
