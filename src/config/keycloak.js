@@ -4,7 +4,6 @@ const keycloakConf = {
 	"auth-server-url": "https://sso-olagoldhackxx-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/auth/",
 	"ssl-required": "external",
 	"resource": "wavers-sso",
-	"verify-token-audience": true,
 	"credentials": {
 	  "secret": "5affe59f-18e7-41e0-ab62-dca4f7567169"
 	},
