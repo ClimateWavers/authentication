@@ -2,7 +2,7 @@
 const keycloakConf = {
 	"realm": "climatewavers",
 	"auth-server-url": "https://sso-olagoldhackxx-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/auth/",
-	"ssl-required": "all",
+	"ssl-required": "external",
 	"resource": "wavers-sso",
 	"verify-token-audience": true,
 	"credentials": {
