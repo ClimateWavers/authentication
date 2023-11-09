@@ -39,7 +39,7 @@ github.use(
           },
         });
         if (userExists) {
-          await userExists.update({ isFacebookUser: true });
+          await userExists.update({ isGithubUser: true });
           await userExists.save();
           // generate an jwt token for user
           const userDetails = {

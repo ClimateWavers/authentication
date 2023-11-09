@@ -3,13 +3,13 @@ const app = express();
 require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
-const { authRouter, kc, currentSession } = require("./src/routers/auth");
+const { authRouter, currentSession } = require("./src/routers/auth");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-const passport = require('passport')
+const passport = require("passport");
 const dbConnect = require("./src/utils/dbconnect");
 const port = process.env.PORT;
-const flash = require('express-flash');
+const flash = require("express-flash");
 app.use(flash());
 
 // connect database
@@ -37,31 +37,26 @@ app.use(express.json());
 //express session middleware
 app.use(currentSession);
 
-app.use(kc.middleware());
-
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
 app.use(cookieParser(process.env.JWT_SECRET));
-app.use(passport.initialize())
-//app.use(passport.session())
+app.use(passport.initialize());
 
 // setup routes
 app.use("/api/v1/auth", authRouter);
 
 app.get("/error", (req, res) => {
-	try {
-	  const error = req.flash('error');
-	  console.log(error)
-	  return res.status(401).json({error});
-	}
-	catch(err) {
-		return res.status(401).send(err);
-
-	}
-})
+  try {
+    const error = req.flash("error");
+    console.log(error);
+    return res.status(401).json({ error });
+  } catch (err) {
+    return res.status(401).send(err);
+  }
+});
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server running on port: ${port}`);
-  });
+  console.log(`Server running on port: ${port}`);
+});

@@ -1,36 +1,55 @@
 const express = require("express");
-const Keycloak = require("keycloak-connect");
-const {
-  oauthSignIn,
-  redhatSS0,
-  linkedInOauth,
-} = require("../controllers/auth");
+const { oauthSignIn, linkedInOauth } = require("../controllers/auth");
+const keycloak = require("../config/keycloak");
 const google = require("../config/google");
 const linkedin = require("../config/linkedin");
 const facebook = require("../config/facebook");
 const github = require("../config/github");
-const keycloakConf = require("../config/keycloak");
 const authRouter = express.Router();
 const session = require("express-session");
-const memoryStore = new session.MemoryStore();// Initialize client.
+const memoryStore = new session.MemoryStore();
+const { Issuer } = require("openid-client");
 
 const currentSession = session({
-  cookie: {
-    secure: true,
-    maxAge: 60000,
-  },
   secret: "secret",
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   store: memoryStore,
 });
-// Keycloak initiation
-var kc = new Keycloak(
-  {
-    store: memoryStore,
+
+// keycloak initiation
+async function initializeOIDC() {
+  const keycloakIssuer = await Issuer.discover(process.env.KEYCLOAK_SERVER_URL);
+  const { Client } = keycloakIssuer;
+  const client = new Client({
+    client_id: "wavers-sso",
+    client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
+    redirect_uris: [`${process.env.BASE_URL}/api/v1/auth/redhat-sso/callback`],
+    response_types: ["code"],
+  });
+
+  return client;
+}
+authRouter.get("/redhat-sso", async (req, res, next) => {
+  const client = await initializeOIDC();
+  const keycloakPassport = await keycloak(client);
+  keycloakPassport.authenticate("oidc")(req, res, next);
+});
+
+//Login user with redhat sso
+authRouter.get(
+  "/redhat-sso/callback",
+  async (req, res, next) => {
+    const client = await initializeOIDC();
+    const keycloakPassport = await keycloak(client);
+    keycloakPassport.authenticate("oidc", {
+      failureRedirect: "/error",
+      failureFlash: true,
+    })(req, res, next);
   },
-  keycloakConf
+  oauthSignIn
 );
+
 //Login user with google
 authRouter.get(
   "/google",
@@ -61,9 +80,6 @@ authRouter.get(
   }),
   oauthSignIn
 );
-
-//Login user with redhat sso
-authRouter.get("/redhat-sso", kc.protect(), redhatSS0);
 
 // Login with facebook
 authRouter.get(
@@ -103,4 +119,4 @@ authRouter.get(
   oauthSignIn
 );
 
-module.exports = { authRouter, currentSession, kc };
+module.exports = { authRouter, currentSession };
