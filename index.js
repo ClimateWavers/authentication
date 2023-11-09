@@ -37,7 +37,7 @@ app.use(express.json());
 //express session middleware
 app.use(currentSession);
 
-app.use(kc.middleware());
+//app.use(kc.middleware());
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
