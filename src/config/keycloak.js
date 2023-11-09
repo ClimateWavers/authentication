@@ -8,6 +8,8 @@ async function keycloakStrategy(client) {
   keycloak.use(
     "oidc",
     new Strategy({ client }, async (tokenSet, userinfo, done) => {
+	  const accessToken = tokenSet.access_token;
+	  const refreshToken = tokenSet.refresh_token
 	  try {
         if (!userinfo.email) {
           const emailNotFound = {
