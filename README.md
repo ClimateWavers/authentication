@@ -1,88 +1,86 @@
-# Climate Wavers - Django Server
+# Climate Wavers - Authentication microservices
 
+## Overview
 
-The Django Server component of the Climate Change and Disaster Response Platform is responsible for handling core functionalities, user management, and data processing tasks. Built on the Django web framework, this server provides a robust and secure backend for the application.
-
-## Table of Contents
-
-- [Climate Wavers - Django Server](#climate-wavers---django-server)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-  - [Features](#features)
-  - [Installation and Setup](#installation-and-setup)
-  - [API Endpoints](#api-endpoints)
-  - [Environment Variables](#environment-variables)
-  - [License](#license)
-
-
-## Project Overview
-
-The Climate Change and Disaster Response Platform aims to monitor climate changes, predict natural disasters, and facilitate efficient disaster response. Leveraging Django, the server component ensures seamless user experience, data management, and integration with various data sources.
+This microservice is a part of Climate Wavers  an AI-driven disaster response application that utilizes multiple authentication providers such as Red Hat SSO, Facebook, LinkedIn, GitHub, and Google. The microservices architecture is implemented in Node.js, with passport and openid connect libraries for authentication. The application securely stores user data in a MariaDB database and uses refresh tokens for extended access.
 
 ## Features
 
-- **User Authentication:** Secure user registration, login, and profile management.
-- **Data Management:** Store and manage user data, community information, and datasets.
-- **Real-time Data Processing:** Process incoming data streams for analysis and visualization.
-- **Collaborative Communities:** Enable users to form communities, share observations, and collaborate.
-- **API Endpoints:** Provides RESTful APIs for frontend interaction and external integrations.
+- **Authentication Providers:** Integrates Red Hat SSO, Facebook, LinkedIn, GitHub, and Google for user authentication.
+- **Microservices Architecture:** Multiple microservices are used to enhance modularity and scalability.
+- **Token Management:** Utilizes refresh tokens for prolonged access and sends access tokens to users for accessing other microservices.
+- **Database:** Stores user data securely in a MariaDB database.
+ 
+## Technologies Used
 
-## Installation and Setup
+- Node.js
+- Passport
+- OpenID Connect
+- Red Hat SSO
+- Facebook Login API
+- LinkedIn API
+- GitHub API
+- Google API
+- MariaDB
+- OpenShift (for deploying Red Hat SSO server)
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/IsmaelKiprop/ClimateWavers.git
-   cd ClimateWavers
-   ```
+## Setup
 
-2. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Prerequisites
 
-3. **Database Setup:**
-   - Configure the database settings in `settings.py`.
-   - Run migrations:
-     ```bash
-     python manage.py migrate
-     ```
+- Node.js installed
+- MariaDB installed
+- OpenShift cluster set up
 
-4. **Static and Media Files:**
-   - Collect static files:
-     ```bash
-     python manage.py collectstatic
-     ```
-   - Configure media file settings in `settings.py`.
+### Installation
 
-5. **Run the Django Development Server:**
-   ```bash
-   python manage.py runserver
-   ```
+1. Clone the repository:
 
-   The Django server will be available at `http://localhost:8000`.
+```bash
+git clone https://github.com/yourusername/your-repo.git
+cd your-repo
+```
 
-## API Endpoints
+2. Install dependencies:
 
-- **User Management:**
-  - `/api/users/register/`: POST endpoint for user registration.
-  - `/api/users/login/`: POST endpoint for user login.
-  - `/api/users/profile/`: GET endpoint to retrieve user profile information.
+```bash
+npm install
+```
 
-- **Community Management:**
-  - `/api/communities/`: GET and POST endpoint for community management.
-  - `/api/communities/<community_id>/`: GET, PUT, and DELETE endpoint for individual communities.
+3. Configure environment variables:
 
-- **Data Processing:**
-  - Define additional endpoints for real-time data processing based on project requirements.
+   - Set up credentials for authentication providers (Red Hat SSO, Facebook, LinkedIn, GitHub, Google).
+   - Configure the database connection details.
 
-## Environment Variables
+4. Start the application:
 
-- **SECRET_KEY:** Django secret key for security (store in a secure environment).
-- **DEBUG:** Set to `True` for development, `False` for production.
-- **DATABASE_URL:** Database connection URL for MYSQL databases.
-- **ALLOWED_HOSTS:** List of allowed hostnames for the Django server.
+```bash
+npm start
+```
 
+## Deployment
+
+### Red Hat SSO Server on OpenShift Cluster
+
+1. Deploy the Red Hat SSO server on your OpenShift cluster.
+2. Configure the necessary realms, clients, and users within the Red Hat SSO administration console.
+
+## Usage
+
+Describe how users can use and interact with your application. Include examples or screenshots if applicable.
+
+## Contributing
+
+If you'd like to contribute to the project, please follow the [Contribution Guidelines](CONTRIBUTING.md).
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- Mention any libraries or individuals you want to acknowledge.
+
+---
+
+Feel free to add or modify sections based on your specific requirements and the details of your project.
