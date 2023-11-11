@@ -9,7 +9,7 @@ This microservice is a part of Climate Wavers  an AI-driven disaster response ap
 - **Authentication Providers:** Integrates Red Hat SSO, Facebook, LinkedIn, GitHub, and Google for user authentication.
 - **Microservices Architecture:** Multiple microservices are used to enhance modularity and scalability.
 - **Token Management:** Utilizes refresh tokens for prolonged access and sends access tokens to users for accessing other microservices.
-- **Database:** Stores user data securely in a MariaDB database.
+- **Database:** Stores user data securely in the application main MariaDB database, to enable synchronise with other microservices in the application using same database
  
 ## Technologies Used
 
