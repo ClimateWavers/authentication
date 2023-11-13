@@ -7,7 +7,6 @@ This microservice is a part of Climate Wavers  an AI-driven disaster response ap
 ## Features
 
 - **Authentication Providers:** Integrates Red Hat SSO, Facebook, LinkedIn, GitHub, and Google for user authentication.
-- **Microservices Architecture:** Multiple microservices are used to enhance modularity and scalability.
 - **Token Management:** Utilizes refresh tokens for prolonged access and sends access tokens to users for accessing other microservices.
 - **Database:** Stores user data securely in the application main MariaDB database, to enable synchronise with other microservices in the application using same database
  
@@ -91,25 +90,52 @@ Deploy with tekton with the pipeline deployment script in `automated_deployment`
 
 ### Red Hat SSO Server on OpenShift Cluster
 
-1. Deploy the Red Hat SSO server on your OpenShift cluster.
+1. Instantiate the Redhat SSO Persistent volume template to deploy SSO server on your OpenShift cluster.
 2. Configure the necessary realms, clients, and users within the Red Hat SSO administration console.
 
-## Usage
 
-Describe how users can use and interact with your application. Include examples or screenshots if applicable.
+## Environment Variables
 
-## Contributing
+This project uses several environment variables to configure various aspects. These variables are stored in a file named `.env` in the project root directory. Below is a list of available environment variables and their purposes:
 
-If you'd like to contribute to the project, please follow the [Contribution Guidelines](CONTRIBUTING.md).
+### Database Configuration
 
-## License
+- **MARIADB_USER**: Username for MariaDB database.
+- **MARIADB_PASSWORD**: Password for MariaDB database.
+- **MARIADB_DB_NAME**: Name of the MariaDB database.
+- **MARIADB_PORT**: Port on which MariaDB is running.
+- **MARIADB_SERVER**: Server or host address for MariaDB.
+
+### Google OAuth Configuration
+
+- **GOOGLE_CLIENT_ID**: Client ID for Google OAuth.
+- **GOOGLE_CLIENT_SECRET**: Client Secret for Google OAuth.
+
+### JWT Token Configuration
+
+- **ACCESS_SECRET**: Secret key for JWT token.
+- **ACCESS_EXPIRES_IN**: Expiry time for JWT token in seconds.
+
+### Server Configuration
+
+- **PORT**: Port on which the server will run.
+- **BASE_URL**: Base URL for the application.
+
+### Keycloak Configuration
+
+- **KEYCLOAK_SERVER_URL**: URL of the Keycloak server.
+- **KEYCLOAK_CLIENT_SECRET**: Client secret for Keycloak.
+
+### LinkedIn OAuth Configuration
+
+- **LINKEDIN_CLIENT_ID**: Client ID for LinkedIn OAuth.
+- **LINKEDIN_CLIENT_SECRET**: Client Secret for LinkedIn OAuth.
+
+### Facebook OAuth Configuration
+
+- **FB_CLIENT_ID**: Client ID for Facebook OAuth.
+- **FB_CLIENT_SECRET**: Client Secret for Facebook OAuth.
+
+### License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-- Mention any libraries or individuals you want to acknowledge.
-
----
-
-Feel free to add or modify sections based on your specific requirements and the details of your project.
