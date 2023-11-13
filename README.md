@@ -1,88 +1,141 @@
-# Climate Wavers - Django Server
+# Climate Wavers - Authentication microservices
 
+## Overview
 
-The Django Server component of the Climate Change and Disaster Response Platform is responsible for handling core functionalities, user management, and data processing tasks. Built on the Django web framework, this server provides a robust and secure backend for the application.
-
-## Table of Contents
-
-- [Climate Wavers - Django Server](#climate-wavers---django-server)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-  - [Features](#features)
-  - [Installation and Setup](#installation-and-setup)
-  - [API Endpoints](#api-endpoints)
-  - [Environment Variables](#environment-variables)
-  - [License](#license)
-
-
-## Project Overview
-
-The Climate Change and Disaster Response Platform aims to monitor climate changes, predict natural disasters, and facilitate efficient disaster response. Leveraging Django, the server component ensures seamless user experience, data management, and integration with various data sources.
+This microservice is a part of Climate Wavers  an AI-driven disaster response application that utilizes multiple authentication providers such as Red Hat SSO, Facebook, LinkedIn, GitHub, and Google. The microservices architecture is implemented in Node.js, with passport and openid connect libraries for authentication. The application securely stores user data in a MariaDB database and uses refresh tokens for extended access.
 
 ## Features
 
-- **User Authentication:** Secure user registration, login, and profile management.
-- **Data Management:** Store and manage user data, community information, and datasets.
-- **Real-time Data Processing:** Process incoming data streams for analysis and visualization.
-- **Collaborative Communities:** Enable users to form communities, share observations, and collaborate.
-- **API Endpoints:** Provides RESTful APIs for frontend interaction and external integrations.
+- **Authentication Providers:** Integrates Red Hat SSO, Facebook, LinkedIn, GitHub, and Google for user authentication.
+- **Token Management:** Utilizes refresh tokens for prolonged access and sends access tokens to users for accessing other microservices.
+- **Database:** Stores user data securely in the application main MariaDB database, to enable synchronise with other microservices in the application using same database
+ 
+## Technologies Used
 
-## Installation and Setup
+- Node.js
+- Passport
+- OpenID Connect
+- Red Hat SSO
+- Facebook Login API
+- LinkedIn API
+- GitHub API
+- Google API
+- MariaDB
+- OpenShift (for deploying Red Hat SSO server)
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/IsmaelKiprop/ClimateWavers.git
-   cd ClimateWavers
+## Setup
+
+### Prerequisites
+
+- Node.js installed
+- MariaDB installed
+- OpenShift cluster set up
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/your-repo.git
+cd your-repo
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Configure environment variables:
+
+   - Set up credentials for authentication providers (Red Hat SSO, Facebook, LinkedIn, GitHub, Google).
+   - Configure the database connection details.
+
+4. Start the application:
+
+```bash
+npm start
+```
+
+## Deployment
+We provide three different methods for deploying this microservice to openshift clusters.
+### Import Git Repositoy (Recommended)
+Use the import git repository feature on openshift console.
+- Navigate to Add page in the Developer console on openshift
+- Select Dockerfile strategy
+- Deployment type should be Deployment Config
+- Secure routes
+- Supply the environment variables after deployment
+  
+### Automated Command line Deployment
+Using the scripts provided in `automate_development` folder, simplifies deployment. To use the scripts, docker and oc must be installed.
+
+#### Build and push image
+You can replace the image repository in the scripts `build.sh` in `automate_deployment` or use the repository we provided.
+  ```bash
+   automate_deployment/./build.sh
+   ```
+#### Deploy 
+If the image repository was changed when building, update the `development.yaml` file in `k8s` folder with your image repository
+  ```bash
+   automate_deployment/./deploy.sh
    ```
 
-2. **Install Dependencies:**
+### Tekton pipeline deployment script
+Deploy with tekton with the pipeline deployment script in `automated_deployment` directory. Setup environment variabes after deployment
    ```bash
-   pip install -r requirements.txt
+   automate_deployment/./tekton_pipeline.sh
    ```
 
-3. **Database Setup:**
-   - Configure the database settings in `settings.py`.
-   - Run migrations:
-     ```bash
-     python manage.py migrate
-     ```
 
-4. **Static and Media Files:**
-   - Collect static files:
-     ```bash
-     python manage.py collectstatic
-     ```
-   - Configure media file settings in `settings.py`.
+### Red Hat SSO Server on OpenShift Cluster
 
-5. **Run the Django Development Server:**
-   ```bash
-   python manage.py runserver
-   ```
+1. Instantiate the Redhat SSO Persistent volume template to deploy SSO server on your OpenShift cluster.
+2. Configure the necessary realms, clients, and users within the Red Hat SSO administration console.
 
-   The Django server will be available at `http://localhost:8000`.
-
-## API Endpoints
-
-- **User Management:**
-  - `/api/users/register/`: POST endpoint for user registration.
-  - `/api/users/login/`: POST endpoint for user login.
-  - `/api/users/profile/`: GET endpoint to retrieve user profile information.
-
-- **Community Management:**
-  - `/api/communities/`: GET and POST endpoint for community management.
-  - `/api/communities/<community_id>/`: GET, PUT, and DELETE endpoint for individual communities.
-
-- **Data Processing:**
-  - Define additional endpoints for real-time data processing based on project requirements.
 
 ## Environment Variables
 
-- **SECRET_KEY:** Django secret key for security (store in a secure environment).
-- **DEBUG:** Set to `True` for development, `False` for production.
-- **DATABASE_URL:** Database connection URL for MYSQL databases.
-- **ALLOWED_HOSTS:** List of allowed hostnames for the Django server.
+This project uses several environment variables to configure various aspects. These variables are stored in a file named `.env` in the project root directory. Below is a list of available environment variables and their purposes:
 
+### Database Configuration
 
-## License
+- **MARIADB_USER**: Username for MariaDB database.
+- **MARIADB_PASSWORD**: Password for MariaDB database.
+- **MARIADB_DB_NAME**: Name of the MariaDB database.
+- **MARIADB_PORT**: Port on which MariaDB is running.
+- **MARIADB_SERVER**: Server or host address for MariaDB.
+
+### Google OAuth Configuration
+
+- **GOOGLE_CLIENT_ID**: Client ID for Google OAuth.
+- **GOOGLE_CLIENT_SECRET**: Client Secret for Google OAuth.
+
+### JWT Token Configuration
+
+- **ACCESS_SECRET**: Secret key for JWT token.
+- **ACCESS_EXPIRES_IN**: Expiry time for JWT token in seconds.
+
+### Server Configuration
+
+- **PORT**: Port on which the server will run.
+- **BASE_URL**: Base URL for the application.
+
+### Keycloak Configuration
+
+- **KEYCLOAK_SERVER_URL**: URL of the Keycloak server.
+- **KEYCLOAK_CLIENT_SECRET**: Client secret for Keycloak.
+
+### LinkedIn OAuth Configuration
+
+- **LINKEDIN_CLIENT_ID**: Client ID for LinkedIn OAuth.
+- **LINKEDIN_CLIENT_SECRET**: Client Secret for LinkedIn OAuth.
+
+### Facebook OAuth Configuration
+
+- **FB_CLIENT_ID**: Client ID for Facebook OAuth.
+- **FB_CLIENT_SECRET**: Client Secret for Facebook OAuth.
+
+### License
 
 This project is licensed under the [MIT License](LICENSE).
