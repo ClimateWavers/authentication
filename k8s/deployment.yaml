@@ -1,27 +1,26 @@
-kind: Deployment
-apiVersion: apps/v1
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
-  name: climatewavers-backend
   labels:
-    app: climatewavers-backend
-    sandbox: olagoldhackxx
-    sandbox-olagoldhackxx: climatewavers-backend
+    app: oauth
+    app.kubernetes.io/component: oauth
+    app.kubernetes.io/instance: oauth
+    app.kubernetes.io/name: oauth
+  name: oauth
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: climatewavers-backend
+    app: oauth
   template:
     metadata:
       labels:
-        app: climatewavers-backend
+        app: oauth
     spec:
-      imagePullSecrets:
-        - name: quay-registry-secret
       containers:
-        - name: climatewavers-backend
-          image: quay.io/olagoldhackxx/climatewavers-backend:v1
+        - image: quay.io/olagoldhackxx/oauth:v1
           imagePullPolicy: Always
+          name: oauth
           ports:
-            - containerPort: 80
+            - containerPort: 8000
               protocol: TCP
