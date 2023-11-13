@@ -31,7 +31,7 @@ facebook.use(
 		try {
 		   // save user to db and return access token if user does not exist
 		   if (!profile._json.email) {
-			profile._json.email = profile._json.name.split(" ")[0]
+			profile._json.email = profile.name.givenName
 		  }
 		  // return access token if user already exists
 		  const userExists = await User.findOne({where: {
