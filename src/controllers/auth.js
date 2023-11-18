@@ -138,5 +138,4 @@ const linkedInOauth = async (req, res, next) => {
 module.exports = {
   oauthSignIn,
   linkedInOauth,
-  redhatSS0,
 };

@@ -26,7 +26,7 @@ github.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         if (!profile._json.email) {
-         profile._json.email = profile._json.name.split(" ")[0]
+          profile._json.email = profile._json.name.split(" ")[0];
         }
         // return access token if user already exists
         const userExists = await User.findOne({
@@ -74,6 +74,12 @@ github.use(
         await Token.create({
           refreshToken: accessToken,
           UserId: user.id,
+        }).catch((err) => {
+          console.log(err.message);
+          const errMsg = {
+            message: err.message,
+          };
+		  return done(err, false, errMsg);
         });
         console.log("Autenticated successfully");
         return done(null, userDetails);
