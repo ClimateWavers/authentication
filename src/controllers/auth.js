@@ -23,6 +23,8 @@ const oauthSignIn = async (req, res) => {
     }
     refreshToken = existingToken.refreshToken;
     user.refreshToken = refreshToken;
+	req.session.user = user
+	req.session.save();
     attachCookiesToResponse({ res, user: user, refreshToken });
     return res.redirect(process.env.HOMEPAGE)
   } catch (err) {
@@ -31,6 +33,11 @@ const oauthSignIn = async (req, res) => {
   }
 };
 
+const getUserData = (req, res) => {
+	const user = req.session.user
+	return res.status(200).json({user});
+
+}
 
 const linkedInOauth = async (req, res, next) => {
   try {
@@ -138,4 +145,5 @@ const linkedInOauth = async (req, res, next) => {
 module.exports = {
   oauthSignIn,
   linkedInOauth,
+  getUserData
 };

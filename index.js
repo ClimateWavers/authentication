@@ -3,12 +3,14 @@ const app = express();
 require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
-const { authRouter, currentSession } = require("./src/routers/auth");
+const authRouter = require("./src/routers/auth");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const passport = require("passport");
 const dbConnect = require("./src/utils/dbconnect");
 const port = process.env.PORT;
+const session = require("express-session");
+const memoryStore = new session.MemoryStore();
 const flash = require("express-flash");
 app.use(flash());
 
@@ -27,15 +29,27 @@ connectMariaDB();
 app.use(morgan("tiny"));
 app.use(
   cors({
-    origin: process.env.BASE_URL,
+    origin: process.env.HOMEPAGE,
+	credentials: true
   })
 );
+
 
 //built-in middleware for json
 app.use(express.json());
 
 //express session middleware
-app.use(currentSession);
+app.use(session({
+	secret: "secret",
+	resave: true,
+	saveUninitialized: true,
+	cookie: {
+		maxAge: 24 * 60 * 60 * 1000 * 7, //seven days
+		secure: false
+	},
+	store: memoryStore,
+  })
+  );
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));

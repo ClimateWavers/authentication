@@ -1,21 +1,12 @@
 const express = require("express");
-const { oauthSignIn, linkedInOauth } = require("../controllers/auth");
+const { oauthSignIn, linkedInOauth, getUserData } = require("../controllers/auth");
 const keycloak = require("../config/keycloak");
 const google = require("../config/google");
 const linkedin = require("../config/linkedin");
 const facebook = require("../config/facebook");
 const github = require("../config/github");
 const authRouter = express.Router();
-const session = require("express-session");
-const memoryStore = new session.MemoryStore();
 const { Issuer } = require("openid-client");
-
-const currentSession = session({
-  secret: "secret",
-  resave: false,
-  saveUninitialized: true,
-  store: memoryStore,
-});
 
 // keycloak initiation
 async function initializeOIDC() {
@@ -119,4 +110,9 @@ authRouter.get(
   oauthSignIn
 );
 
-module.exports = { authRouter, currentSession };
+authRouter.get(
+	"/user",
+	getUserData
+);
+
+module.exports = authRouter;
